@@ -1,0 +1,152 @@
+ANNOTATION RULES FOR NEWS ARTICLE BIAS CLASSIFICATION
+
+==============================================================================
+I. POLARITY DEFINITIONS - Choose ONE of these 5 categories:
+==============================================================================
+
+1. Biased For the Government (1 to 0.66)
+   Definition: Contains statements or sections that are clearly biased towards the government.
+   Example: "The Government has imposed effective policies that will make the nation great again."
+
+2. Slightly Biased For the Government (0.65 to 0.16)
+   Definition: Contains some statements or sections that are subtly biased towards the government.
+   Example: "The Government has imposed policies to improve its standing."
+
+3. Neutral (-0.15 to 0.15)
+   Definition: Contains statements that showcase no direct bias towards or against the government.
+   Example: "The Government has imposed new policies for the nation."
+
+4. Slightly Biased Against the Government (-0.65 to -0.16)
+   Definition: Contains statements or sections that are subtly biased against the government.
+   Example: "The Government has imposed somewhat ineffective policies."
+
+5. Biased Against the Government (-1 to -0.66)
+   Definition: Contains statements or sections that are clearly biased against the government.
+   Example: "The tyrannical Government has imposed fascistic policies."
+
+==============================================================================
+II. TYPES OF BIASES TO DETECT
+==============================================================================
+
+1. OPINION STATEMENTS
+   Personal commentary irrelevant to objective reporting, including subjective descriptions or claims.
+   - Present when statement includes personal commentary irrelevant to the report
+   - May be present in small phrases or certain word choices
+   - For government: Article states policy is good based on believed intent
+   - Against government: Article states policy is bad based on believed intent
+
+2. SENSATIONALISM
+   Statements exaggerated to create a more emotional response.
+   - For government: "highly successful", "massively improved"
+   - Against government: "disastrous", "disaster"
+
+3. AD HOMINEM BIAS
+   Focus on character of an organization or person rather than policy.
+   - Includes mentioning positive aspects of character to make subject look good
+   - For government: Attacks character of protesters, engages in red-tagging
+   - Against government: Questions government motives, calls them thieves
+
+4. MIND READING BIAS
+   Assumes thoughts, intentions, or motives of government agency without official statement.
+   - Note: Even if official statement exists but is NOT credited/mentioned in article, it's still mind reading
+   - For government: "government had best intention of citizens in mind"
+   - Against government: "government using policy to intentionally oppress people"
+
+5. WORD CHOICE/SLANT/LABELING/SUBJECTIVE QUALIFYING ADJECTIVES
+   Subtle biases defined by word-choices, highlighting positive or negative aspects.
+   - Use this category if hard to pinpoint under other categories but includes polarizing words
+   - For government: "smooth", "tirelessly", "efficient"
+   - Against government: "weak", "lazy", "slow"
+
+6. FLAWED LOGIC BIAS
+   Biases that rely on flawed logic including:
+   - Hasty generalizations
+   - False Cause Fallacy (Non causa pro causa)
+   - Slippery slope
+   - Black-and-white thinking
+   - Fallacy of division
+   - Fallacy of composition
+   - Fallacy of accident
+   - Irrelevant conclusion fallacy
+   - Appeal to groupthink
+   - Appeal to authority
+   - Red Herring
+
+==============================================================================
+III. DEFINITION OF "SLIGHT BIAS"
+==============================================================================
+
+"Slight bias" is defined as a statement that exhibits:
+- A SINGULAR and SUBTLE instance of bias, OR
+- A SINGULAR charged instance OR 3-5 instances of subtle bias
+- Limited to a singular word or phrase within the section/sentence
+
+Subtle: Language that does not affect the subject relative to other words/phrases
+Charged: Language that affects the subject MORE than other words/phrases
+
+Sections/sentences exceeding these limits = "Biased"
+Sections/sentences below these limits = "Neutral"
+
+==============================================================================
+IV. BIAS TABLE WITH EXAMPLES
+==============================================================================
+
+TYPE OF BIAS: Opinion Statements
+---
+For Government: "The counter-terrorist efforts of the Armed Forces against the terrorists are crucial in preventing leftist terrorism."
+Neutral: "The Armed Forces engaged in armed efforts against suspected rebels."
+Against Government: "The martyrs who were slain by the Armed Forces show clear disregard for the people's struggles."
+
+TYPE OF BIAS: Sensationalism
+---
+For Government: "The highly successful policies of the Department of Transportation have massively improved public transport throughout the country."
+Neutral: "The policies of the Department of Transportation have seen mixed results nationwide."
+Against Government: "Outdated and inadequate policies of the Department of Transportation have spelled disaster for millions of Filipino commuters."
+
+TYPE OF BIAS: Ad Hominem
+---
+For Government: "The benevolent Department of National Defense, with a proven track record of protecting Filipinos, has enacted a new policy."
+Alternative: "Protests against the new policy of the Department are known to be headed by radical leftists imprisoned for inciting violence."
+Neutral: "The Department of Defense has enacted new policies with mixed opinions."
+Against Government: "Known for oppressing students for political gain, the Department of Defense has enacted a new policy."
+Alternative: "Protesters against the new Department of National Defense policies include brave activists who committed most of their lives fighting for human rights."
+
+TYPE OF BIAS: Mind Reading
+---
+For Government: "The Department of Education, in sympathy and generosity towards students, has announced sweeping reforms to improve education."
+Neutral: "The Department of Education has announced sweeping reforms to improve education."
+Against Government: "The Department of Education, in hopes to further privatize education, has announced sweeping reforms."
+
+TYPE OF BIAS: Word Choice
+---
+For Government: "The Department of Science and Technology has successfully introduced state-of-the-art Doppler radars to massively increase its capacity to track the weather."
+Neutral: "The Department of Science and Technology has introduced Doppler radars to improve its capacity to track the weather."
+Against Government: "The Department of Science and Technology has only recently introduced Doppler radars, which they claim will help improve their capacity to track the weather."
+
+TYPE OF BIAS: Flawed Logic
+---
+For Government: "As the Department of National Defense enforces the Anti-Terrorism bill, radical leftist protesters joined by rebel organizations such as Anakbayan and Makabayan have exhibited rebellious behavior, which calls into question if they really are fighting for the Philippines like fellow peaceful citizens. Makabayan is also a supporter of militant action, which makes enforcement necessary to make the Philippines safe. It should be noted that Anakbayan's only Senator supported the bill."
+(Contains: Hasty generalization, appeal to groupthink, implication of guilt by association)
+
+Neutral: "The Department of National Defense begins enforcing the Anti-Terrorism bill to mixed reactions. Government groups claim that it will help bolster national security, while organizations like Anakbayan claim that the bill will stifle free speech for the citizens."
+
+Against Government: "The Anti-Terrorism Bill enforced by the Department of National Defense has made it clear, the government is not on your side. The current administration is willing to silence student voices through prosecution, oppress free speech, and take away the rights of responsible citizens over their right to assembly. This may be the start of more fascistic policies that the citizens should continue to resist."
+(Contains: Slippery slope, black-and-white thinking)
+
+==============================================================================
+V. WHAT SHOULD NOT BE ANNOTATED
+==============================================================================
+
+1. Do NOT annotate bias if charged words are factually accurate.
+   Example: "The Government has killed people" is NOT biased if the article discusses an actual military operation.
+
+2. Do NOT annotate simply based on the presence of charged words.
+   Example: "communist" alone is not biased, but "communist rebels" is charged.
+
+3. Do NOT annotate based purely on claim veracity.
+   Example: "The Philippine Government has been seen planting trees in Vietnam" is not necessarily biased just because it's disputed.
+
+4. Do NOT annotate bias towards governments OTHER than the Philippine Government.
+   Example: "The Chinese Government continues to showcase years of collaborative effort with the Philippines" - this is biased towards China, NOT the Philippine Government.
+
+==============================================================================

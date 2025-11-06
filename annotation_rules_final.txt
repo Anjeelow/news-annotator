@@ -1,0 +1,489 @@
+ANNOTATION RULES FOR NEWS ARTICLE BIAS CLASSIFICATION
+Enhanced with Outlet-Specific Patterns & Confirmed Subtle Markers
+Philippine Political News - Article Body Only
+(Tweaked Version Based on Dataset Analysis)
+
+==============================================================================
+I. POLARITY DEFINITIONS - Choose ONE of these 5 categories:
+==============================================================================
+
+1. Biased For the Government (1 to 0.66)
+   Definition: Contains statements or sections that are clearly biased towards the government.
+   Example: "The Government has imposed effective policies that will make the nation great again."
+   
+   LOOK FOR SUBTLE MARKERS (Confirmed in Dataset):
+   - Government agency mentioned first (CHR, DSWD, Comelec "disclosed/investigated")
+   - Active voice with government as agent: "DSWD uncovers," "government implements"
+   - Positive qualifiers: successfully, systematically, thoroughly, proactively
+   - Government official quoted early in article (before paragraph 3)
+   - Government given more space/detail than opposition response
+   - Opposition relegated to "reaction" slot (final paragraphs)
+   - Government framed as investigating/taking action on problems
+
+
+2. Slightly Biased For the Government (0.65 to 0.16)
+   Definition: Contains some statements or sections that are subtly biased towards the government.
+   Example: "The Government has imposed policies to improve its standing."
+   
+   LOOK FOR SUBTLE MARKERS (Confirmed in Dataset):
+   - Mix of neutral and pro-government framing
+   - Government official quoted prominently but not exclusively
+   - Active voice for government actions mixed with some passive
+   - Phrases like: "disclosed findings," "initial investigation," "systematic approach"
+   - "Clarified" used for government rebuttal (implies misunderstanding was resolved)
+   - "However" or "but" before government statement (softens bad news with government perspective)
+   - 1 pro-gov subtle marker OR 1 charged pro-gov word (not multiple)
+
+
+3. Neutral (-0.15 to 0.15)
+   Definition: Contains statements that showcase no direct bias towards or against the government.
+   Example: "The Government has imposed new policies for the nation."
+   
+   MARKERS OF NEUTRALITY:
+   - Balanced attribution: Both government and opposition quoted equally in article
+   - Both quoted in opening 3 paragraphs OR both relegated to later sections
+   - Same grammatical structure: Both active voice OR both passive voice (consistency)
+   - NO loaded qualifiers (none of: "finally," "yet," "allegedly," "claimed," "maintained," "merely," "questioned")
+   - Named sources equally for both government and opposition
+   - No excuse-making for government failures
+   - No emphasis on government intent without attribution
+   - Neutral verbs throughout: "announced," "stated," "said" (not "defended," "clarified," "claimed")
+   - Balanced space allocation (roughly equal paragraph count for each perspective)
+
+
+4. Slightly Biased Against the Government (-0.65 to -0.16)
+   Definition: Contains statements or sections that are subtly biased against the government.
+   Example: "The Government has imposed somewhat ineffective policies."
+   
+   LOOK FOR SUBTLE MARKERS (Confirmed in Dataset):
+   - Opposition quoted first in article opening (before government response)
+   - "Allegedly/alleged" appears 1-2 times (creates doubt about government legitimacy)
+   - "Yet" + government problem mentioned: "Yet concerns persist"
+   - Passive voice for government failures: "Concerns were raised" (hides WHO raised them)
+   - Active voice for opposition criticism: "Critics questioned" "Opposition challenged"
+   - Government response relegated to final paragraphs (3+ paragraphs after criticism)
+   - Phrases like: "questioned," "challenged," "persisted," "maintained" (defending position sounds stubborn)
+   - Opposition given more space/detail than government response
+   - "Should remain," "must address" (imperative language criticizing government)
+   - 1 anti-gov subtle marker OR 1 charged anti-gov word (not multiple)
+
+
+5. Biased Against the Government (-1 to -0.66)
+   Definition: Contains statements or sections that are clearly biased against the government.
+   Example: "The tyrannical Government has imposed fascistic policies."
+   
+   LOOK FOR SUBTLE MARKERS (Confirmed in Dataset):
+   - Opposition analysis given authority; government dismissed or backgrounded
+   - Government relegated to final paragraph as "reaction" not substantive response
+   - Active voice emphasizing government failures: "Government failed," "Agency delayed"
+   - Consistent negative qualifiers: controversial, questioned, disputed, scrutinized
+   - "Questions persist about..." without providing government answers
+   - Multiple critical sources (3+), single government source or NO government source
+   - Passive voice used to hide WHO is criticizing: "It was noted..." (actually opposition said it)
+   - No balance offered; government response buried or absent
+   - Multiple anti-gov subtle markers (2+ instances of "allegedly," "questioned," "yet," etc.)
+
+==============================================================================
+II. TYPES OF BIASES TO DETECT
+==============================================================================
+
+1. OPINION STATEMENTS
+   Personal commentary irrelevant to objective reporting, including subjective descriptions or claims.
+   - Present when statement includes personal commentary irrelevant to the report
+   - May be present in small phrases or certain word choices
+   - For government: Article states policy is good based on believed intent
+   - Against government: Article states policy is bad based on believed intent
+
+2. SENSATIONALISM
+   Statements exaggerated to create a more emotional response.
+   - For government: "highly successful", "massively improved", "systematic", "thorough"
+   - Against government: "disastrous", "catastrophic", "chaotic", "inadequate"
+
+3. AD HOMINEM BIAS
+   Focus on character of an organization or person rather than policy.
+   - Includes mentioning positive aspects of character to make subject look good
+   - For government: Attacks character of protesters, engages in red-tagging, praises official competence
+   - Against government: Questions government motives, character attacks on officials, vilifies government intent
+
+4. MIND READING BIAS
+   Assumes thoughts, intentions, or motives of government agency without official statement.
+   - Note: Even if official statement exists but is NOT credited/mentioned in article, it's still mind reading
+   - For government: "government had best intention of citizens in mind" (without attribution)
+   - Against government: "government using policy to intentionally oppress people" (without official response)
+
+5. WORD CHOICE/SLANT/LABELING/SUBJECTIVE QUALIFYING ADJECTIVES
+   Subtle biases defined by word-choices, highlighting positive or negative aspects.
+   - Use this category if hard to pinpoint under other categories but includes polarizing words
+   
+   CONFIRMED SUBTLE MARKERS FROM YOUR DATASET:
+   
+   For government: "smooth", "efficient", "systematic", "thorough", "proactive", "swift", "timely"
+   - Also watch for: "disclosed", "investigated", "uncovers" (frames government as active agent)
+   
+   Against government: "allegedly", "yet", "questioned", "challenged", "maintained", "merely", "persisted"
+   - Also watch for: "should remain", "must address" (imperative criticism)
+   
+   PHILIPPINE-SPECIFIC WORD PATTERNS:
+   - "War on drugs" vs. "anti-drug campaign" (different emotional weight)
+   - "Extra-judicial" vs. "summary" killings (emotional intensity differs)
+   - "Crackdown" vs. "operation" vs. "initiative"
+   - "Alleged" vs. "documented" (credibility implication)
+   - "Disclosed findings" = government transparency (pro-gov frame)
+   - "Uncovered" = government competence (pro-gov frame)
+
+6. FLAWED LOGIC BIAS
+   Biases that rely on flawed logic including:
+   - Hasty generalizations: "All government policies fail" without evidence
+   - False Cause Fallacy (Non causa pro causa): attributing events to government without proof
+   - Slippery slope: "This policy will lead to fascism"
+   - Black-and-white thinking: Government is either all good or all evil
+   - Fallacy of division: "Party members are corrupt, therefore government is corrupt"
+   - Fallacy of composition: "One agency failed, therefore all government fails"
+   - Irrelevant conclusion fallacy: Using unrelated examples to judge government
+   - Appeal to groupthink: "Everyone knows government is bad"
+   - Appeal to authority: "Experts say government is wrong" without naming experts
+   - Red Herring: Introducing irrelevant facts to distract from main government action
+
+==============================================================================
+III. OUTLET-SPECIFIC BIAS PATTERNS (From Your Dataset Analysis)
+==============================================================================
+
+IMPORTANT: Different outlets frame government actions differently. Recognize these patterns:
+
+ABS-CBN PATTERN:
+- Frequently opens with government agency actions (CHR, DSWD, Comelec investigating)
+- Government officials quoted prominently and early
+- Structure often: [Government action/investigation] → [Details] → [Opposition reaction]
+- Subtle bias tendency: SLIGHTLY PRO-GOVERNMENT through source selection
+- Watch for: Government framed as proactive/investigating (vs. reactionary)
+- Example from dataset: "DSWD Secretary Rex Gatchalian disclosed Thursday..."
+  → Puts government in investigation/discovery role at article start
+
+GMA PATTERN:
+- More balanced opening attribution (both government and opposition visible)
+- Mixed use of active/passive voice
+- Sometimes both sides quoted equally; sometimes emphasis varies
+- Subtle bias tendency: MIXED (neither consistently pro nor anti)
+- Watch for: Voice consistency - does government get same grammatical treatment as opposition?
+- Often quotes government officials prominently but also quotes opposition critics
+- Example from dataset: Mix of official statements and opposition challenges
+
+RAPPLER PATTERN:
+- Neutral, observational tone with data/statistics/polling
+- Less direct criticism language; more structured/evidence-based
+- Political coverage emphasizes numbers and facts
+- Subtle bias tendency: More NEUTRAL overall
+- Watch for: When Rappler DOES criticize, it's typically more structured/data-backed than emotional
+- More likely to use passive voice for both sides (neutral but may hide responsibility)
+- Example from dataset: Survey data, statistics, polling information presented objectively
+
+INQUIRER PATTERN:
+- Balanced coverage with mixed sources
+- Mix of official statements and independent voices
+- Tendency toward neutral-to-balanced framing
+
+PHILSTAR PATTERN:
+- Similar balanced approach to Inquirer
+- Mix of official and independent sources
+
+GUIDANCE FOR ANNOTATION:
+- If article opens with government agency: likely slightly pro-gov framing (ABS-CBN pattern)
+- If article opens with opposition criticism: likely slightly anti-gov framing (GMA sometimes)
+- If article mixes both equally: likely more neutral
+- Consider outlet tendency but don't let it override actual bias markers in article
+
+==============================================================================
+IV. NATIONAL vs. LOCAL GOVERNMENT BIAS
+==============================================================================
+
+YOUR DATASET INCLUDES BOTH:
+
+NATIONAL GOVERNMENT = Marcos administration, Vice President, national departments (DOH, DSWD, etc.)
+LOCAL GOVERNMENT = Pasig City Mayor Vico Sotto, city-level policies, local politics
+
+ANNOTATION RULE:
+- Annotate both EQUALLY for bias toward/against
+- Treat Vico Sotto articles the SAME way as Marcos administration articles
+- A bias TOWARD Vico Sotto's policies/actions = PRO-GOVERNMENT (local)
+- A bias AGAINST Vico Sotto's policies/actions = ANTI-GOVERNMENT (local)
+
+EXAMPLES:
+- Article praising Vico Sotto's Pasig programs = Slightly Biased For Government (local)
+- Article criticizing Vico Sotto's leadership = Slightly Biased Against Government (local)
+- Article balanced on Vico's actions = Neutral
+
+Do NOT treat local government differently. Use same rubric for all government levels.
+
+==============================================================================
+V. DEFINITION OF "SLIGHT BIAS" (REVISED)
+==============================================================================
+
+"Slight bias" is defined as a statement that exhibits:
+- ONE SUBTLE MARKER from confirmed list (see Section II.5: "allegedly," "yet," "questioned," "disclosed," etc.)
+  OR
+- ONE CHARGED WORD that is clearly biased (see bias types in Section II)
+  OR
+- 2-3 SUBTLE MARKERS across the entire article body
+
+COUNT SUBTLE MARKERS:
+- For each article, count total subtle markers
+- 0 markers + balanced attribution = NEUTRAL
+- 1 marker (subtle or charged) = SLIGHTLY BIASED
+- 2+ markers OR combination of markers = BIASED
+
+EXAMPLES:
+- Article has 1 "allegedly" + balanced other content = Slightly Biased Against
+- Article has "disclosed findings" + government-first quote = Slightly Biased For
+- Article has "questioned" + "yet" + opposition-first quotes = Biased Against
+- Article has no markers + balanced quotes = Neutral
+
+==============================================================================
+VI. BIAS TABLE WITH EXAMPLES (From Your Dataset)
+==============================================================================
+
+REAL EXAMPLE 1 (ABS-CBN): DSWD Article - Government-Focused Investigation
+Full opening: "MANILA (UPDATE) — Department of Social Welfare and Development (DSWD) Secretary Rex Gatchalian disclosed Thursday that there was a 'systematic' identification..."
+
+Analysis:
+- Government (DSWD) in opening → Pro-gov framing begins here
+- "Disclosed findings" = government transparency frame
+- "Systematic" = government thoroughness
+- Active voice: "DSWD uncovers"
+- Marker: "disclosed" (pro-gov subtle marker from dataset)
+- Attribution: Government first
+
+Classification: SLIGHTLY BIASED FOR GOVERNMENT
+Reason: Government-first attribution + 1 pro-gov marker ("disclosed") + active government agency voice
+
+---
+
+REAL EXAMPLE 2 (GMA): Marcos/PhilHealth Article - Opposition Challenge
+Full opening: "Bayan Muna chairperson Neri Colmenares on Thursday asked the Supreme Court (SC) to retain President Ferdinand Marcos Jr. as a respondent in their petition..."
+
+Analysis:
+- Opposition (Bayan Muna) in opening → Anti-gov framing begins here
+- Active voice for opposition: "asked the Supreme Court"
+- Framing: Opposition challenging government
+- Language: "retain...as respondent" = legal accountability frame
+- Marker: "questioned/challenged" (anti-gov subtle marker from dataset)
+
+Classification: SLIGHTLY BIASED AGAINST GOVERNMENT
+Reason: Opposition-first attribution + challenge framing + active opposition voice
+
+---
+
+EXAMPLE 3 (Neutral for Comparison):
+"The Department of Transportation announced new policies on Wednesday. Officials stated the changes would improve efficiency. Critics argued the policies overlooked commuter concerns. Department representatives responded that implementation would begin next month."
+
+Analysis:
+- Balanced attribution (government and opposition both mentioned)
+- Same voice structure (both stated/argued/said)
+- No loaded qualifiers (no "finally," "yet," "allegedly")
+- Equal space given
+- No markers
+
+Classification: NEUTRAL
+Reason: Balanced structure, equal attribution, no subtle markers
+
+==============================================================================
+VII. WHAT SHOULD NOT BE ANNOTATED
+==============================================================================
+
+1. Do NOT annotate bias if charged words are factually accurate.
+   Example: "The Government has killed people" is NOT biased if the article discusses an actual military operation.
+
+2. Do NOT annotate simply based on the presence of charged words.
+   Example: "communist" alone is not biased, but "communist rebels" with emotional framing is charged.
+
+3. Do NOT annotate based purely on claim veracity.
+   Example: "The Philippine Government has been seen planting trees in Vietnam" is not necessarily biased just because disputed.
+
+4. Do NOT annotate bias towards governments OTHER than the Philippine Government.
+   Example: "The Chinese Government continues to showcase collaboration with the Philippines" - this is about China, not Philippine government.
+
+5. Do NOT over-label merely mentioning opposition as bias.
+   Example: Election coverage that says "Candidate A and Candidate B competed" is NEUTRAL, not anti-government.
+   Bias only if: Opposition is framed as wrong/bad/illegitimate.
+
+6. Do NOT confuse reporting investigative findings with bias.
+   Example: "CHR investigation found violations" is NOT biased (factual finding), even though critical of government actors.
+
+==============================================================================
+VIII. ANNOTATION CHECKLIST FOR EACH ARTICLE
+==============================================================================
+
+BEFORE YOU ANNOTATE, COMPLETE THIS CHECKLIST:
+
+[ ] SCOPE CHECK: Am I reading ONLY the article body, not the headline?
+
+[ ] FIRST ACTOR CHECK: Who appears FIRST in opening paragraphs?
+    - Government/official first → potential pro-gov framing (especially if ABS-CBN)
+    - Opposition/critics first → potential anti-gov framing
+    - Both equally → more likely neutral
+    Note: Which outlet? (ABS-CBN more likely to put gov first)
+
+[ ] BALANCE CHECK: How much space does each side get?
+    - Count approximate paragraphs for government perspective vs. opposition
+    - Significantly unequal (60%+ to one side) = likely biased toward that side
+    - Roughly equal = likely neutral
+
+[ ] VOICE CHECK: What verbs/voices are used?
+    - Government actions in active voice? Opposition in passive? → Pro-gov bias
+    - Opposition in active voice? Government in passive? → Anti-gov bias
+    - Both consistent? → More likely neutral
+    - Note: "said," "stated," "announced" = neutral; "clarified," "questioned," "challenged" = potentially biased
+
+[ ] MARKER COUNT: How many subtle markers appear?
+    Count these specific words/phrases:
+    
+    Pro-gov markers (in your dataset):
+    • "disclosed," "disclosed findings," "uncovers," "systematic," "proactive," "initiative"
+    • "finally" (if used: implies previous neglect, now fixed)
+    
+    Anti-gov markers (in your dataset):
+    • "allegedly," "yet" (+ problem), "questioned," "challenged," "maintained," "persisted"
+    • "should remain," "must address" (imperative criticism)
+    
+    Count: ___ markers total
+    - 0 markers = no marker-based bias
+    - 1 marker = slight bias
+    - 2+ markers = biased
+
+[ ] FAILURE EXPLANATION CHECK: Are government failures explained or excused?
+    - Failure mentioned WITH excuse = pro-gov bias framing
+    - Failure mentioned WITHOUT explanation = anti-gov framing
+    - No failures mentioned = depends on other checks
+
+[ ] SOURCE ATTRIBUTION: Are sources named or vague?
+    - Named sources equally = neutral
+    - "Sources say" + vague claim = bias likely (hiding attribution)
+    - Government sources prominent but opposition vague = pro-gov bias
+    - Opposition sources prominent but government vague = anti-gov bias
+
+[ ] BALANCE TEST: If criticism is made, is government response included?
+    - Criticism answered/rebutted = more balanced, likely neutral
+    - Criticism left unanswered = anti-gov bias
+    - Only government perspective shown = pro-gov bias
+
+DECISION: Based on your checklist, select ONE category:
+- [ ] Biased For (1 to 0.66)
+- [ ] Slightly Biased For (0.65 to 0.16)
+- [ ] Neutral (-0.15 to 0.15)
+- [ ] Slightly Biased Against (-0.65 to -0.16)
+- [ ] Biased Against (-1 to -0.66)
+
+==============================================================================
+IX. FOR GPT-5 NANO ANNOTATION PROMPT
+==============================================================================
+
+Use this prompt template when deploying GPT-5 Nano:
+
+---
+
+You are annotating Philippine English-language news articles (article body ONLY, not headlines) 
+about government and political matters from outlets including ABS-CBN, GMA, Rappler, Inquirer, 
+and Philippine Star.
+
+Your task: Classify each article into ONE of these 5 categories for bias toward the Philippine government
+(national: Marcos/VP/DOH/DSWD or local: Pasig Mayor Vico Sotto).
+
+CATEGORIES:
+1. BIASED FOR (1 to 0.66): Government favorably framed, opposition backgrounded, proactive government voice
+2. SLIGHTLY BIASED FOR (0.65 to 0.16): Mixed with subtle pro-gov language, government gets more space/detail
+3. NEUTRAL (-0.15 to 0.15): Balanced attribution, no loaded qualifiers, equal voice structure
+4. SLIGHTLY BIASED AGAINST (-0.65 to -0.16): Mixed with subtle anti-gov language, opposition gets more authority
+5. BIASED AGAINST (-1 to -0.66): Government negatively framed, opposition favored, government backgrounded
+
+KEY MARKERS TO DETECT:
+
+PRO-GOVERNMENT SUBTLE MARKERS (Look for these):
+- "Disclosed," "disclosed findings," "uncovers," "systematic," "proactive" (government competence frame)
+- Government agency/official quoted first in article
+- Active voice for government actions: "DSWD uncovers," "government implements"
+- Government given significantly more space than opposition response
+- Opposition relegated to "reaction" slot (final paragraphs)
+- Example: "DSWD Secretary disclosed findings..." → Pro-gov opening
+
+ANTI-GOVERNMENT SUBTLE MARKERS (Look for these):
+- "Allegedly," "yet" (followed by problem), "questioned," "challenged," "maintained," "persisted"
+- Opposition cited first in article opening
+- "Should remain," "must address" (imperative criticism language)
+- Passive voice for government failures: "Concerns were raised"
+- Active voice for opposition: "Critics questioned"
+- Government response buried in final paragraphs
+- Example: "Opposition challenged Marcos..." + government response in final para → Anti-gov
+
+NEUTRALITY MARKERS (Look for these):
+- Both government and opposition quoted equally and prominently
+- Both subjects use same voice structure (both active or both passive)
+- NO markers like "allegedly," "yet," "questioned," "maintained"
+- Neutral verbs: "said," "announced," "stated" (not "clarified," "defended," "claimed")
+- Roughly equal paragraph allocation to both perspectives
+- Example: "Officials stated X. Critics argued Y. Officials responded..."
+
+OUTLET-SPECIFIC CONTEXT:
+- ABS-CBN often opens with government agency investigations (typical pro-gov structure, may be neutral)
+- GMA more mixed, balanced attribution common
+- Rappler typically neutral/observational with data
+- Consider outlet pattern but apply same markers to all
+
+INSTRUCTIONS:
+1. Read article body only (ignore headline)
+2. Count subtle markers present
+3. Assess attribution order and voice consistency
+4. Check balance of space/detail between government and opposition
+5. Select ONE category that best describes the article's bias
+
+Output format:
+Classification: [Select one of the 5 categories above]
+Confidence: [High/Medium/Low]
+Primary marker: [Which specific marker/pattern drove your decision]
+Reasoning: [2-3 sentences explaining your classification]
+
+---
+
+Example output:
+Classification: SLIGHTLY BIASED AGAINST
+Confidence: High
+Primary marker: Opposition cited first (opening 2 paragraphs) + "questioned" language + government response delayed to final paragraph
+Reasoning: Article opens with opposition challenge to Marcos before providing government context. Government response appears only in final paragraphs. Uses "questioned" framing for opposition arguments.
+
+==============================================================================
+X. VALIDATION TESTING PROCESS
+==============================================================================
+
+BEFORE DEPLOYING GPT-5 NANO ON YOUR FULL DATASET:
+
+Step 1: You manually annotate 30-50 articles
+- Select mix of articles (different outlets, topics, dates)
+- Use enhanced rules Section VIII (Annotation Checklist)
+- Document your reasoning for each label
+- This creates your "gold standard"
+
+Step 2: Deploy GPT-5 Nano on same 30-50 articles
+- Use the prompt template from Section IX
+- Have GPT-5 Nano annotate the same articles
+
+Step 3: Compare and measure agreement
+- Calculate exact agreement %
+- Calculate Cohen's kappa for reliability
+- Goal: 75%+ agreement OR kappa > 0.65
+
+Step 4: Analyze disagreements
+- Where does GPT-5 Nano differ from your labels?
+- Do disagreements follow a pattern? (e.g., always under-labels anti-gov bias?)
+- Refine prompt or rules if systematic bias found
+
+Step 5: Decision
+- If agreement > 80%: Deploy to full 300 articles confidently
+- If 70-79%: Deploy but note limitations; consider double-checking disagreements
+- If < 70%: Refine rules/prompt and re-test before deployment
+
+==============================================================================
+
+VERSION NOTES:
+- Tweaked from original enhanced rules to include outlet patterns
+- Confirmed subtle markers based on actual dataset analysis (375 articles, 5 outlets)
+- Added local vs. national government clarification
+- Revised Section III with real patterns found in your data
+- Ready for manual annotation + GPT-5 Nano deployment
