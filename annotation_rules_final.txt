@@ -380,23 +380,20 @@ Use this prompt template when deploying GPT-5 Nano:
 
 ---
 
-You are annotating Philippine English-language news articles (article body ONLY, not headlines) 
-about government and political matters from outlets including ABS-CBN, GMA, Rappler, Inquirer, 
-and Philippine Star.
+You are annotating Philippine English-language news articles (article body ONLY, not headlines) about government and political matters from outlets including ABS-CBN, GMA, Rappler, Inquirer, and Philippine Star.
 
-Your task: Classify each article into ONE of these 5 categories for bias toward the Philippine government
-(national: Marcos/VP/DOH/DSWD or local: Pasig Mayor Vico Sotto).
+Your task: Classify each article into ONE of these 5 categories for bias toward the Philippine government (national: Marcos/VP/DOH/DSWD or local: Pasig Mayor Vico Sotto).
 
-CATEGORIES:
+CATEGORIES: 
 1. BIASED FOR (1 to 0.66): Government favorably framed, opposition backgrounded, proactive government voice
 2. SLIGHTLY BIASED FOR (0.65 to 0.16): Mixed with subtle pro-gov language, government gets more space/detail
 3. NEUTRAL (-0.15 to 0.15): Balanced attribution, no loaded qualifiers, equal voice structure
 4. SLIGHTLY BIASED AGAINST (-0.65 to -0.16): Mixed with subtle anti-gov language, opposition gets more authority
 5. BIASED AGAINST (-1 to -0.66): Government negatively framed, opposition favored, government backgrounded
 
-KEY MARKERS TO DETECT:
+KEY MARKERS TO DETECT: 
 
-PRO-GOVERNMENT SUBTLE MARKERS (Look for these):
+PRO-GOVERNMENT SUBTLE MARKERS (Look for these): 
 - "Disclosed," "disclosed findings," "uncovers," "systematic," "proactive" (government competence frame)
 - Government agency/official quoted first in article
 - Active voice for government actions: "DSWD uncovers," "government implements"
@@ -404,16 +401,15 @@ PRO-GOVERNMENT SUBTLE MARKERS (Look for these):
 - Opposition relegated to "reaction" slot (final paragraphs)
 - Example: "DSWD Secretary disclosed findings..." → Pro-gov opening
 
-ANTI-GOVERNMENT SUBTLE MARKERS (Look for these):
+ANTI-GOVERNMENT SUBTLE MARKERS (Look for these): 
 - "Allegedly," "yet" (followed by problem), "questioned," "challenged," "maintained," "persisted"
-- Opposition cited first in article opening
-- "Should remain," "must address" (imperative criticism language)
+- Opposition cited first in article opening - "Should remain," "must address" (imperative criticism language)
 - Passive voice for government failures: "Concerns were raised"
 - Active voice for opposition: "Critics questioned"
 - Government response buried in final paragraphs
 - Example: "Opposition challenged Marcos..." + government response in final para → Anti-gov
 
-NEUTRALITY MARKERS (Look for these):
+NEUTRALITY MARKERS (Look for these): 
 - Both government and opposition quoted equally and prominently
 - Both subjects use same voice structure (both active or both passive)
 - NO markers like "allegedly," "yet," "questioned," "maintained"
@@ -421,32 +417,34 @@ NEUTRALITY MARKERS (Look for these):
 - Roughly equal paragraph allocation to both perspectives
 - Example: "Officials stated X. Critics argued Y. Officials responded..."
 
-OUTLET-SPECIFIC CONTEXT:
+OUTLET-SPECIFIC CONTEXT: 
 - ABS-CBN often opens with government agency investigations (typical pro-gov structure, may be neutral)
 - GMA more mixed, balanced attribution common
 - Rappler typically neutral/observational with data
 - Consider outlet pattern but apply same markers to all
 
-INSTRUCTIONS:
+INSTRUCTIONS: 
 1. Read article body only (ignore headline)
 2. Count subtle markers present
 3. Assess attribution order and voice consistency
 4. Check balance of space/detail between government and opposition
 5. Select ONE category that best describes the article's bias
 
-Output format:
-Classification: [Select one of the 5 categories above]
-Confidence: [High/Medium/Low]
-Primary marker: [Which specific marker/pattern drove your decision]
-Reasoning: [2-3 sentences explaining your classification]
-
----
-
-Example output:
-Classification: SLIGHTLY BIASED AGAINST
-Confidence: High
-Primary marker: Opposition cited first (opening 2 paragraphs) + "questioned" language + government response delayed to final paragraph
-Reasoning: Article opens with opposition challenge to Marcos before providing government context. Government response appears only in final paragraphs. Uses "questioned" framing for opposition arguments.
+Output format: 
+Classification: [Select one of the 5 categories above] 
+Confidence: [High/Medium/Low] 
+Primary marker: [Which specific marker/pattern drove your decision] 
+Reasoning: [2-3 sentences explaining your classification] 
+Statements and words that indicate bias against: [Phrases and words that indicate bias against the government, negative statements about the government or sentences leaning against government views.] 
+Statements and words that indicate bias for: [Phrases and words that indicate bias for the government, positive statements about the government or sentences leaning towards government views.] 
+--- 
+Example output: 
+Classification: SLIGHTLY BIASED AGAINST 
+Confidence: High 
+Primary marker: Opposition cited first (opening 2 paragraphs) + "questioned" language + government response delayed to final paragraph 
+Reasoning: Article opens with opposition challenge to Marcos before providing government context. Government response appears only in final paragraphs. Uses "questioned" framing for opposition arguments. 
+Statements and words that indicate bias against: "Delays in Government questioned" "catastrophic failure" 
+Statements and words that indicate bias for: "Government's effective role in mitigating" "excellent response"
 
 ==============================================================================
 X. VALIDATION TESTING PROCESS

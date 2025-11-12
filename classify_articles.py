@@ -9,9 +9,9 @@ from typing import Optional, Dict, Any
 load_dotenv()
 
 # Defaults from environment so you can "Run" without CLI args
-DEFAULT_INPUT_JSON = os.getenv("INPUT_JSON", "sampled_articles.json")
-DEFAULT_RULES_FILE = os.getenv("RULES_FILE", "annotation_rules.txt")
-DEFAULT_OUTPUT_JSON = os.getenv("OUTPUT_JSON", "labeled_results.json")
+DEFAULT_INPUT_JSON = os.getenv("INPUT_JSON", "verification_sample_articles.json")
+DEFAULT_RULES_FILE = os.getenv("RULES_FILE", "annotation_rules_final.txt")
+DEFAULT_OUTPUT_JSON = os.getenv("OUTPUT_JSON", "labeled_verification_results.json")
 _sample_env = os.getenv("SAMPLE_SIZE")
 try:
     DEFAULT_SAMPLE_SIZE = int(_sample_env) if _sample_env else None
@@ -48,18 +48,20 @@ def create_classification_prompt(article_text: str, rules: str) -> str:
 
 {rules}
 
-Task: Read the ARTICLE BODY ONLY (ignore the headline). Classify the bias toward the Philippine government into exactly one of these categories:
-1. Biased For the Government
-2. Slightly Biased For the Government
-3. Neutral
-4. Slightly Biased Against the Government
-5. Biased Against the Government
+INSTRUCTIONS: 
+1. Read article body only (ignore headline)
+2. Count subtle markers present
+3. Assess attribution order and voice consistency
+4. Check balance of space/detail between government and opposition
+5. Select ONE category that best describes the article's bias
 
-Output format (exactly these four lines, no extra text):
-Classification: <one of the 5 categories above>
-Confidence: <High/Medium/Low>
-Primary marker: <the single most important marker or pattern driving your decision>
-Reasoning: <2-3 sentences explaining the classification>
+Output format: 
+Classification: [Select one of the 5 categories above] 
+Confidence: [High/Medium/Low] 
+Primary marker: [Which specific marker/pattern drove your decision] 
+Reasoning: [2-3 sentences explaining your classification] 
+Statements and words that indicate bias against: [Phrases and words that indicate bias against the government, negative statements about the government or sentences leaning against government views.] 
+Statements and words that indicate bias for: [Phrases and words that indicate bias for the government, positive statements about the government or sentences leaning towards government views.] 
 
 Article body:
 {article_text}

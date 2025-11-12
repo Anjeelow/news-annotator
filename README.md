@@ -57,6 +57,7 @@ python classify_articles.py ^
 ```
 
 Arguments:
+
 - `--input` (default: from `INPUT_JSON` or `sampled_articles.json`) – Path to input JSON.
 - `--rules` (default: from `RULES_FILE` or `annotation_rules.txt`) – Path to the text rules file (you can use `annotation_rules_enhanced.txt`).
 - `--output` (default: from `OUTPUT_JSON` or `labeled_results.json`) – Path for labeled results; appends and de-duplicates by `article_url` per publisher.
@@ -99,7 +100,16 @@ The script expects a dictionary keyed by publisher, with each value a list of ar
 
 Results are saved in the same nested-by-publisher shape with additional fields: `label`, `primary_marker`, `reasoning`, and `confidence`.
 
+## Initial Verification
+
+Use verification_sample_articles.json to validate and cross-reference results with manual annotation in order to gauge the accuracy of the model.
+
+A file called verification_articles.json will contain the manually annotated articles, while labeled_verification_results.json will contain the GPT annotated articles to compare.
+
+The categories are: BF, SBF, N, SBA, BA, which are acronyms of the 5 categories for brevity.
+
 ## Tips
+
 - To use your enhanced rules by default, set `RULES_FILE=annotation_rules_enhanced.txt` in `.env`.
 - If your paths contain spaces, quote them on the CLI, e.g., `--rules "C:\\path with spaces\\annotation_rules_enhanced.txt"`.
 - If you prefer not to mutate your input data, leave `CONSUME_INPUT` unset or `false` (default).
