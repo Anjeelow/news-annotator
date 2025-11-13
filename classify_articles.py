@@ -11,7 +11,7 @@ load_dotenv()
 # Defaults from environment so you can "Run" without CLI args
 DEFAULT_INPUT_JSON = os.getenv("INPUT_JSON", "verification_sample_articles.json")
 DEFAULT_RULES_FILE = os.getenv("RULES_FILE", "annotation_rules_final.txt")
-DEFAULT_OUTPUT_JSON = os.getenv("OUTPUT_JSON", "labeled_verification_results.json")
+DEFAULT_OUTPUT_JSON = os.getenv("OUTPUT_JSON", "gpt5_mini_labeled_verification_results.json")
 _sample_env = os.getenv("SAMPLE_SIZE")
 try:
     DEFAULT_SAMPLE_SIZE = int(_sample_env) if _sample_env else None
@@ -153,7 +153,7 @@ def _parse_model_output(text: str) -> Dict[str, str]:
     return {"label": label, "confidence": confidence, "primary_marker": primary, "reasoning": reasoning}
 
 
-def classify_article(article_text: str, rules: str, model: str = "gpt-4o-mini") -> Optional[Dict[str, str]]:
+def classify_article(article_text: str, rules: str, model: str = "gpt-5-mini") -> Optional[Dict[str, str]]:
     """Classify a single article using the OpenAI API and return structured info."""
     client = _get_client()
     if client is None:
@@ -168,7 +168,7 @@ def classify_article(article_text: str, rules: str, model: str = "gpt-4o-mini") 
                 model=model,
                 messages=[{"role": "user", "content": prompt}],
                 temperature=0.0,
-                max_tokens=256,
+                max_completion_tokens=256,
             )
             raw = resp.choices[0].message.content if resp.choices else None
             if not raw:
@@ -457,7 +457,7 @@ if __name__ == "__main__":
     parser.add_argument("--output", dest="output_file", default=DEFAULT_OUTPUT_JSON, help="Path to write labeled results JSON (or set OUTPUT_JSON in .env)")
     parser.add_argument("--sample-size", dest="sample_size", type=int, default=DEFAULT_SAMPLE_SIZE, help="Optional sample size (or set SAMPLE_SIZE in .env). Picks diverse sample across publishers.")
     parser.add_argument("--consume", dest="consume", action="store_true", default=CONSUME_INPUT_DEFAULT, help="If set (or CONSUME_INPUT=true in .env), remove already-labeled articles from the input JSON after run.")
-    parser.add_argument("--model", dest="model", default="gpt-4o-mini", help="OpenAI model to use")
+    parser.add_argument("--model", dest="model", default="gpt-5-mini", help="OpenAI model to use")
 
     args = parser.parse_args()
 
