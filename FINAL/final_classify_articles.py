@@ -9,9 +9,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Defaults
-DEFAULT_INPUT_JSON = os.getenv("INPUT_JSON", "verification_sample_articles.json")
+DEFAULT_INPUT_JSON = os.getenv("INPUT_JSON", "FINAL/kept_articles.json")
 DEFAULT_RULES_FILE = os.getenv("RULES_FILE", "annotation_rules_final.txt")
-DEFAULT_OUTPUT_JSON = os.getenv("OUTPUT_JSON", "gpt5_mini_labeled_verification_results.json")
+DEFAULT_OUTPUT_JSON = os.getenv("OUTPUT_JSON", "FINAL/gpt5_mini_labeled_kept_results.json")
 
 try:
     from openai import OpenAI
