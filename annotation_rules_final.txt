@@ -289,7 +289,7 @@ Reason: Balanced structure, equal attribution, no subtle markers
 VII. WHAT SHOULD NOT BE ANNOTATED
 ==============================================================================
 
-1. Do NOT annotate bias if charged words are factually accurate.
+1. Do NOT annotate bias if charged words are factually accurate as to what is described in the article.
    Example: "The Government has killed people" is NOT biased if the article discusses an actual military operation.
 
 2. Do NOT annotate simply based on the presence of charged words.

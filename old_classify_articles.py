@@ -168,7 +168,7 @@ def classify_article(article_text: str, rules: str, model: str = "gpt-5-mini") -
                 model=model,
                 messages=[{"role": "user", "content": prompt}],
                 temperature=0.0,
-                max_completion_tokens=256,
+                max_tokens=256,
             )
             raw = resp.choices[0].message.content if resp.choices else None
             if not raw:

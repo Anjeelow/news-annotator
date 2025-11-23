@@ -104,6 +104,8 @@ Results are saved in the same nested-by-publisher shape with additional fields: 
 
 Use verification_sample_articles.json to validate and cross-reference results with manual annotation in order to gauge the accuracy of the model.
 
+verification_sample_articles.json is structured the same way as the sampled articles, except stored in one monolithic array.
+
 A file called verification_articles.json will contain the manually annotated articles, while labeled_verification_results.json will contain the GPT annotated articles to compare.
 
 The categories are: BF, SBF, N, SBA, BA, which are acronyms of the 5 categories for brevity.

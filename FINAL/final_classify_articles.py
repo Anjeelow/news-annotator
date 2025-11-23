@@ -9,9 +9,11 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Defaults
-DEFAULT_INPUT_JSON = os.getenv("INPUT_JSON", "FINAL/kept_articles.json")
+DEFAULT_INPUT_JSON = os.getenv("INPUT_JSON", "FINAL/new_kept_articles.json")
 DEFAULT_RULES_FILE = os.getenv("RULES_FILE", "annotation_rules_final.txt")
-DEFAULT_OUTPUT_JSON = os.getenv("OUTPUT_JSON", "FINAL/gpt5_mini_labeled_kept_results.json")
+DEFAULT_OUTPUT_JSON = os.getenv("OUTPUT_JSON", "FINAL/gpt5_mini_labeled_new_kept_results.json")
+DEFAULT_PROGRESS = os.getenv("PROGRESS", "FINAL/annotation_progress.txt")
+
 
 try:
     from openai import OpenAI
@@ -235,7 +237,7 @@ def classify_article(article_text: str, rules: str, model: str = "gpt-5-mini") -
                     return parsed
 
                 print(f"OpenAI API error (attempt {attempt+1}/3): {e}. No model output; aborting this item.")
-                return None
+                exit(1)
 
             wait = 1.5 * (attempt + 1)
             print(f"OpenAI API error (attempt {attempt+1}/3): {e}. Retrying in {wait:.1f}s...")
@@ -281,6 +283,25 @@ def main(json_filepath: str, rules_filepath: str, output_filepath: str, model_na
     #    - Ensure `publisher` is set
     #    - Drop `replacementvalue`
     # -------------------------------------------------------------
+    existing_results = []
+    processed_urls = set()
+    processed_count = 0
+
+    if os.path.exists(output_filepath):
+        try:
+            with open(output_filepath, "r", encoding="utf-8") as f:
+                existing_results = json.load(f)
+
+            for item in existing_results:
+                url = item.get("article_url")
+                if url:
+                    processed_urls.add(url)
+
+            processed_count = len(existing_results)
+            print(f"Resuming: {processed_count} articles already processed.")
+        except:
+            print("Warning: Failed to load existing output; starting fresh.")
+
     print(f"Loading articles from {json_filepath}...")
     try:
         with open(json_filepath, "r", encoding="utf-8") as f:
@@ -328,6 +349,15 @@ def main(json_filepath: str, rules_filepath: str, output_filepath: str, model_na
     errors = 0
 
     for idx, article in enumerate(articles, 1):
+        url = article.get("article_url")
+        # Track last processed URL
+        with open("annotation_progress.txt", "w", encoding="utf-8") as f:
+            f.write(url or f"INDEX:{idx}")
+
+        # Skip if previously processed
+        if url and url in processed_urls:
+            print(f"[{idx}/{len(articles)}] Skipping (already processed)")
+            continue
         body = article.get("article_body", "")
         if not body or len(body.strip()) < 50:
             print(f"[{idx}/{len(articles)}] SKIPPED (too short)")
@@ -348,6 +378,11 @@ def main(json_filepath: str, rules_filepath: str, output_filepath: str, model_na
                 "error": "OpenAI client or API failure (no model response)",
                 "raw_model_output": ""
             })
+            # Save progress after every article
+            safe_save = existing_results + results
+            with open(output_filepath, "w", encoding="utf-8") as f:
+                json.dump(safe_save, f, indent=2, ensure_ascii=False)
+
             continue
 
         # If there was a model response but parser couldn't find label
@@ -367,6 +402,12 @@ def main(json_filepath: str, rules_filepath: str, output_filepath: str, model_na
                     "reasoning": info.get("reasoning", "")
                 }
             })
+            # Save progress after every article
+            safe_save = existing_results + results
+            with open(output_filepath, "w", encoding="utf-8") as f:
+                json.dump(safe_save, f, indent=2, ensure_ascii=False)
+
+
             continue
 
         # Normal success path
@@ -379,9 +420,16 @@ def main(json_filepath: str, rules_filepath: str, output_filepath: str, model_na
             "raw_model_output": raw_text
         })
 
+        # Save progress after every article
+        safe_save = existing_results + results
+        with open(output_filepath, "w", encoding="utf-8") as f:
+            json.dump(safe_save, f, indent=2, ensure_ascii=False)
+
+
     # -------------------------------------------------------------
     # 4) Save results + print summary
     # -------------------------------------------------------------
+    
     with open(output_filepath, "w", encoding="utf-8") as f:
         json.dump(results, f, indent=2, ensure_ascii=False)
 
