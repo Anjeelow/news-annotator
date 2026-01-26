@@ -1,0 +1,282 @@
+SECTION 1 — TYPES AND CLASSIFICATION OF BIAS
+
+CORE DEFINITIONS
+
+Bias refers to language that influences how readers perceive the Philippine Government’s actions or performance.
+
+Bias may be:
+- Subtle: Slightly nudges perception through wording or framing.
+- Overt (Blatant): Strongly directs reader approval or disapproval.
+
+Both subtle bias and overt bias count as biased language.
+
+
+1. OPINION STATEMENTS
+
+Bias exists when subjective judgment is presented without factual grounding.
+
+Indicators:
+- Personal commentary
+- Value judgments framed as fact
+- Claims about intent or effectiveness without evidence
+
+Examples:
+- Biased For: “The policy is crucial for national security.”
+- Biased Against: “The policy exists only to suppress dissent.”
+- Neutral: “The policy was enacted last year.”
+
+
+2. SENSATIONALISM
+
+Bias created through exaggeration or emotionally charged framing.
+
+Indicators:
+- Overstated outcomes
+- Extreme praise or condemnation
+
+Examples:
+- Biased For: “The policy was a massive success.”
+- Biased Against: “The policy has spelled disaster for millions.”
+- Neutral: “The policy produced mixed results.”
+
+
+3. AD HOMINEM BIAS
+
+Bias that focuses on character rather than actions or evidence.
+
+Indicators:
+- Red-tagging
+- Moral labeling
+- Praising character to legitimize actions
+
+Examples:
+- Biased For: Attacking critics as “radicals” or “terrorists”
+- Biased Against: Calling officials “thieves” or “oppressors”
+- Neutral: Reporting disagreement without character judgment
+
+
+4. MIND READING BIAS
+
+Bias that assumes intent, motive, or internal reasoning without attribution.
+
+Rule:
+Even if an official explanation exists, failure to credit a source still counts as mind reading.
+
+Examples:
+- Biased For: “The government acted out of pure concern for citizens.”
+- Biased Against: “The policy was designed to silence critics.”
+- Neutral: “The government stated the policy aims to…”
+
+
+5. SLANT, LABELING, SUBJECTIVE ADJECTIVES, AND WORD CHOICE
+
+This category is the primary source of subtle bias.
+
+Subtle Bias:
+- Often a single word or phrase
+- Slightly shifts perception
+- Becomes stronger through repetition
+
+Examples:
+- “slain” vs. “killed”
+- “claims” vs. “stated”
+- “only recently introduced”
+
+Overt Word Choice Bias:
+- Clearly evaluative or polarizing
+- Can stand alone as bias
+
+Examples:
+- Biased For: “efficient”, “tireless”, “excellent”
+- Biased Against: “lazy”, “weak”, “incompetent”
+
+Rule:
+If bias cannot be clearly categorized elsewhere but relies on polarizing wording, classify it here.
+
+
+6. FLAWED LOGIC BIAS
+
+Bias created through logical fallacies that influence perception of the Philippine Government.
+
+Includes:
+- Hasty generalization
+- False cause
+- Slippery slope
+- Black-and-white thinking
+- Appeal to authority
+- Appeal to groupthink
+- Red herring
+
+
+BIAS STRENGTH AND SCALES
+
+Subtle Bias:
+- Slight influence on perception
+- Often cumulative
+- One instance alone may not justify labeling the article as biased
+
+Overt Bias:
+- Strong influence on perception
+- A single instance may be sufficient
+
+
+ARTICLE-LEVEL CLASSIFICATION
+
+5-Point Scale:
+- Slightly Biased:
+  - One overt bias instance OR
+  - Multiple subtle biases
+- Biased:
+  - Multiple overt bias instances OR
+  - Repeated subtle bias forming a clear partisan narrative
+
+3-Point Scale:
+- Biased:
+  - More than two overt bias instances OR
+  - Enough subtle bias to form a partisan view
+- Neutral:
+  - Below these thresholds
+
+
+SECTION 2 — WHEN BIAS SHOULD AND SHOULD NOT BE ANNOTATED
+
+DO NOT ANNOTATE WHEN:
+
+1. Charged words are factually accurate
+   Example: “The AFP killed individuals during a military operation.”
+
+2. A charged word is contextually appropriate
+   Example: “Communist” alone is neutral; “communist rebels” may be biased outside a military context.
+
+3. Factual correctness is the only issue
+   Truth or falsehood alone does not imply bias.
+
+4. Bias targets a foreign government only
+   Exception: If used to promote or undermine the Philippine Government.
+
+5. Government agents criticize other government agents
+   Annotate the actions being criticized, not the critic’s role.
+
+6. Regional, legislative, or judicial bodies are the focus
+   Only annotate national executive branch entities.
+   Exception: Regional offices of national agencies.
+
+7. Quotes are purely descriptive or balanced
+   Summaries of speeches alone are not bias.
+
+
+ANNOTATE WHEN:
+
+1. Language affects perception of government performance or intent.
+2. Word choice frames actions as heroic, malicious, or illegitimate.
+3. Quotes are repeated excessively or drown out opposing views.
+4. Motives or intentions are assumed without attribution.
+5. Charged wording is unnecessary given the context.
+
+
+CRITICAL GUARDRAIL
+
+The presence of charged or emotional wording alone is not sufficient for annotation.
+Bias must influence interpretation, not merely describe events.
+
+
+
+SECTION 3 — RESPONSE FORMAT RULES FOR GPT 5.2 — BIAS ANNOTATION OUTPUT
+
+PURPOSE
+These rules define a strict, machine-readable response format for answering bias annotation questions.
+The model must follow the format exactly to prevent inconsistent labeling.
+
+GENERAL RULES
+- Answer all four questions in order.
+- Do NOT add explanations, reasoning, or extra text.
+- Do NOT restate the questions.
+- Do NOT introduce new labels or variants.
+- Follow capitalization exactly.
+- If a question allows an empty response, leave it completely blank (no placeholders such as N/A).
+
+
+QUESTION 1 — 3-POINT SCALE CLASSIFICATION
+
+Instruction:
+Based on the News Article presented, classify it using the 3-point scale.
+
+Allowed Responses (OUTPUT MUST MATCH EXACTLY ONE):
+BA
+N
+BF
+
+Strict Rule:
+Only respond with one of the following tokens:
+BA | N | BF
+
+Do NOT spell out the label.
+Do NOT add punctuation or text before or after the label.
+
+
+QUESTION 2 — 5-POINT SCALE CLASSIFICATION
+
+Instruction:
+Based on the News Article presented, classify it using the 5-point scale.
+
+Allowed Responses (OUTPUT MUST MATCH EXACTLY ONE):
+BA
+SBA
+N
+SBF
+BF
+
+Strict Rule:
+Only respond with one of the following tokens:
+BA | SBA | N | SBF | BF
+
+Do NOT spell out the label.
+Do NOT add punctuation or text before or after the label.
+
+
+QUESTION 3 — BIAS FOR THE PHILIPPINE GOVERNMENT
+
+Instruction:
+Highlight any sentences, phrases, or words that indicate bias FOR the Philippine Government.
+
+Formatting Rules:
+- Place each detected word, phrase, or sentence inside quotation marks (" ").
+- Separate each item with a comma.
+- Do NOT number the items.
+- Do NOT add explanations or commentary.
+
+Empty Response Rule:
+If NO bias FOR the Philippine Government is detected, return an empty response (leave the line blank).
+
+Example Output:
+"The Department continues to demonstrate excellence", "extremely successful campaign", "efficient"
+
+
+QUESTION 4 — BIAS AGAINST THE PHILIPPINE GOVERNMENT
+
+Instruction:
+Highlight any sentences, phrases, or words that indicate bias AGAINST the Philippine Government.
+
+Formatting Rules:
+- Place each detected word, phrase, or sentence inside quotation marks (" ").
+- Separate each item with a comma.
+- Do NOT number the items.
+- Do NOT add explanations or commentary.
+
+Empty Response Rule:
+If NO bias AGAINST the Philippine Government is detected, return an empty response (leave the line blank).
+
+Example Output:
+"The disastrous policy failure", "economy in freefall", "incompetent"
+
+
+FINAL OUTPUT STRUCTURE (MANDATORY)
+
+The final answer must consist of exactly four lines, in this order:
+
+Line 1: Answer to Question 1 (BA | N | BF)
+Line 2: Answer to Question 2 (BA | SBA | N | SBF | BF)
+Line 3: Answer to Question 3 (quoted items separated by commas, or empty)
+Line 4: Answer to Question 4 (quoted items separated by commas, or empty)
+
+No additional lines are allowed.
