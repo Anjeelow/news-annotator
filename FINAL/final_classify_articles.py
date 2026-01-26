@@ -10,8 +10,8 @@ load_dotenv()
 
 # Defaults
 DEFAULT_INPUT_JSON = os.getenv("INPUT_JSON", "FINAL/new_kept_articles.json")
-DEFAULT_RULES_FILE = os.getenv("RULES_FILE", "annotation_rules_final.txt")
-DEFAULT_OUTPUT_JSON = os.getenv("OUTPUT_JSON", "FINAL/gpt5_mini_labeled_new_kept_results.json")
+DEFAULT_RULES_FILE = os.getenv("RULES_FILE", "annotation_rules_new.txt")
+DEFAULT_OUTPUT_JSON = os.getenv("OUTPUT_JSON", "FINAL/gpt5p2_mini_labeled_new_kept_results.json")
 DEFAULT_PROGRESS = os.getenv("PROGRESS", "FINAL/annotation_progress.txt")
 
 
@@ -64,76 +64,40 @@ def load_articles_from_json(json_filepath: str) -> list:
     return data
 
 
-def create_classification_prompt(article_text: str, rules: str) -> str:
+def create_classification_prompt(article_text: str) -> str:
     return f"""You are an expert news article bias classifier for Philippine government-related news.
-
-{rules}
-
-INSTRUCTIONS:
-1. Read article body only (ignore headline)
-2. Count subtle markers present
-3. Assess attribution order and voice consistency
-4. Check balance of space/detail between government and opposition
-5. Select ONE category that best describes the article's bias
-
-Output format:
-Classification: [Select one of the 5 categories above]
-Confidence: [High/Medium/Low]
-Primary marker: [Which specific marker/pattern drove your decision]
-Reasoning: [2-3 sentences explaining your classification]
 
 Article body:
 {article_text}
 """
 
 
-def _normalize_label(text: str) -> str:
-    if not text:
-        return ""
-    t = text.strip().strip('"').strip("'.:; ")
-
-    # Exact match
-    if t in CATEGORIES:
-        return t
-
-    # Case-insensitive match
-    for cat in CATEGORIES:
-        if t.lower() == cat.lower():
-            return cat
-
-    # Numeric mapping
-    mapping = {str(i + 1): cat for i, cat in enumerate(CATEGORIES)}
-    if t in mapping:
-        return mapping[t]
-
-    return t
-
-
 def _parse_model_output(text: str) -> Dict[str, str]:
-    label = ""
-    confidence = ""
-    primary = ""
-    reasoning = ""
+    VALID_3_POINT = {"BA", "N", "BF"}
+    VALID_5_POINT = {"BA", "SBA", "N", "SBF", "BF"}
 
-    lines = [line.strip() for line in (text or "").splitlines() if line.strip()]
+    raw_lines = (text or "").splitlines()
+    lines = [ln.strip() for ln in raw_lines]
 
-    for ln in lines:
-        lower = ln.lower()
-        if lower.startswith("classification:") or lower.startswith("label:"):
-            label = ln.split(":", 1)[1].strip()
-        elif lower.startswith("confidence:"):
-            confidence = ln.split(":", 1)[1].strip()
-        elif lower.startswith("primary marker:"):
-            primary = ln.split(":", 1)[1].strip()
-        elif lower.startswith("reasoning:"):
-            reasoning = ln.split(":", 1)[1].strip()
+    # Ensure exactly four lines
+    while len(lines) < 4:
+        lines.append("")
+
+    # Enforce format
+    if lines[0] not in VALID_3_POINT:
+        raise ValueError(f"Invalid 3-point label: {lines[0]}")
+
+    if lines[1] not in VALID_5_POINT:
+        raise ValueError(f"Invalid 5-point label: {lines[1]}")
 
     return {
-        "label": label,
-        "confidence": confidence,
-        "primary_marker": primary,
-        "reasoning": reasoning,
+        "label": "SUCCESS",
+        "3_point_label": lines[0],              # BA | N | BF
+        "5_point_label": lines[1],              # BA | SBA | N | SBF | BF
+        "biased_for_indicators": lines[2],      # quoted phrases or empty
+        "biased_against_indicators": lines[3],  # quoted phrases or empty
     }
+
 
 
 def _get_client() -> Optional[Any]:
@@ -151,35 +115,50 @@ def _get_client() -> Optional[Any]:
         return None
 
 
-def classify_article(article_text: str, rules: str, model: str = "gpt-5-mini") -> Optional[Dict[str, str]]:
-    """Call OpenAI API and return parsed classification fields plus raw model text.
+def classify_article(
+    article_text: str,
+    rules: str,
+    model: str = "gpt-5-mini"
+) -> Optional[Dict[str, str]]:
+    """Call OpenAI API and return parsed classification fields plus raw model text."""
 
-    Returns:
-      - dict with keys: label, confidence, primary_marker, reasoning, raw
-      - or None if the client couldn't be created or there was an API-level failure without a model response
-    """
     client = _get_client()
     if client is None:
         return None
 
-    prompt = create_classification_prompt(article_text, rules)
+    user_prompt = create_classification_prompt(article_text)
+
+    messages = [
+        {
+            "role": "system",
+            "content": (
+                "You are an expert news article bias classifier for Philippine government-related news.\n\n"
+                "You must follow the rules below with highest priority and must not deviate from the specified output format.\n\n"
+                "If your output violates the required format, you must correct it before responding.\n\n"
+                f"{rules}"
+            ),
+        },
+        {
+            "role": "user",
+            "content": user_prompt,
+        },
+    ]
 
     for attempt in range(3):
         raw_text = ""
         try:
             resp = client.chat.completions.create(
                 model=model,
-                messages=[{"role": "user", "content": prompt}],
+                messages=messages,
                 max_completion_tokens=32768,
             )
 
             # ------------------------------------------------------------------
-            # 🛡 BULLETPROOF RESPONSE EXTRACTION (works for all OpenAI responses)
+            # 🛡 BULLETPROOF RESPONSE EXTRACTION
             # ------------------------------------------------------------------
             if getattr(resp, "choices", None):
                 choice = resp.choices[0]
 
-                # 1) message.content (string or list)
                 if hasattr(choice, "message") and choice.message:
                     c = choice.message.content
                     if isinstance(c, str):
@@ -191,7 +170,6 @@ def classify_article(article_text: str, rules: str, model: str = "gpt-5-mini") -
                             if isinstance(part, dict)
                         )
 
-                # 2) top-level .content (string or list; used by gpt-5-mini)
                 if not raw_text and hasattr(choice, "content"):
                     c = choice.content
                     if isinstance(c, str):
@@ -203,11 +181,9 @@ def classify_article(article_text: str, rules: str, model: str = "gpt-5-mini") -
                             if isinstance(part, dict)
                         )
 
-                # 3) legacy compatibility .text
                 if not raw_text and hasattr(choice, "text"):
                     raw_text = choice.text or ""
 
-                # 4) dict fallback (rare)
                 if not raw_text and isinstance(choice, dict):
                     raw_text = (
                         choice.get("message", {}).get("content", "") or
@@ -217,14 +193,11 @@ def classify_article(article_text: str, rules: str, model: str = "gpt-5-mini") -
 
             raw_text = (raw_text or "").strip()
             # ------------------------------------------------------------------
-            # END EXTRACTION BLOCK
-            # ------------------------------------------------------------------
 
             if not raw_text:
                 raise ValueError("Empty model response")
 
             parsed = _parse_model_output(raw_text)
-            parsed["label"] = _normalize_label(parsed.get("label", ""))
             parsed["raw"] = raw_text
             return parsed
 
@@ -232,7 +205,6 @@ def classify_article(article_text: str, rules: str, model: str = "gpt-5-mini") -
             if attempt == 2:
                 if raw_text:
                     parsed = _parse_model_output(raw_text)
-                    parsed["label"] = _normalize_label(parsed.get("label", ""))
                     parsed["raw"] = raw_text
                     return parsed
 
@@ -244,6 +216,7 @@ def classify_article(article_text: str, rules: str, model: str = "gpt-5-mini") -
             time.sleep(wait)
 
     return None
+
 
 
 
@@ -397,9 +370,10 @@ def main(json_filepath: str, rules_filepath: str, output_filepath: str, model_na
                 "error": "Model returned output but no parsable label. See raw_model_output.",
                 "raw_model_output": raw_text,
                 "parsed_fields": {
-                    "confidence": info.get("confidence", ""),
-                    "primary_marker": info.get("primary_marker", ""),
-                    "reasoning": info.get("reasoning", "")
+                    "3_point_label": info.get("3_point_label", ""),
+                    "5_point_label": info.get("5_point_label", ""),
+                    "biased_for_indicators": info.get("biased_for_indicators", ""),
+                    "biased_against_indicators": info.get("biased_against_indicators", "")
                 }
             })
             # Save progress after every article
@@ -413,10 +387,11 @@ def main(json_filepath: str, rules_filepath: str, output_filepath: str, model_na
         # Normal success path
         results.append({
             **article,
-            "label": label,
-            "reasoning": info.get("reasoning", ""),
-            "primary_marker": info.get("primary_marker", ""),
-            "confidence": info.get("confidence", ""),
+            "label": info.get("label", ""),
+            "3_point_label": info.get("3_point_label", ""),
+            "5_point_label": info.get("5_point_label", ""),
+            "biased_for_indicators": info.get("biased_for_indicators", ""),
+            "biased_against_indicators": info.get("biased_against_indicators", ""),
             "raw_model_output": raw_text
         })
 
